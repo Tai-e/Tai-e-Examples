@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <java.version>17</java.version>
+        <tai-e.version>0.5.1-SNAPSHOT</tai-e.version>
+    </properties>
+
+    <groupId>org.example</groupId>
+    <artifactId>CallGraph</artifactId>
+    <version>${tai-e.version}</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.pascal-lab</groupId>
+            <artifactId>tai-e</artifactId>
+            <version>${tai-e.version}</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>snapshots</id>
+            <name>Sonatype snapshot server</name>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
