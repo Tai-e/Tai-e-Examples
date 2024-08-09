@@ -4,7 +4,7 @@
 
 ## Project Structure
 
-- `analyzed-programs/`*
+- `analyzed-programs/`
   Contains the program to be analyzed, including both source (`.java`) and compiled (`.class`) files.
   
   - `Main.java` / `Main.class`
