@@ -1,0 +1,27 @@
+optionsFile: null
+printHelp: false
+classPath:
+- MinimalReproducibleExample-0069/analyzed-programs
+appClassPath: []
+mainClass: Main
+inputClasses: []
+javaVersion: 17
+prependJVM: true
+allowPhantom: false
+worldBuilderClass: pascal.taie.frontend.soot.SootWorldBuilder
+outputDir: MinimalReproducibleExample-0069/output
+preBuildIR: false
+worldCacheMode: false
+scope: APP
+nativeModel: true
+planFile: null
+analyses:
+  pta: |
+    cs:ci;
+    implicit-entries:true;
+    distinguish-string-constants:null;
+    reflection-inference:solar;
+    taint-config:MinimalReproducibleExample-0069/configs//taint-config.yml;
+onlyGenPlan: false
+keepResult:
+- $KEEP-ALL
