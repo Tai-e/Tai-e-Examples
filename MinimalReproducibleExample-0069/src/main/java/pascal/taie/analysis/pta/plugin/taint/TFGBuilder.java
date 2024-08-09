@@ -115,8 +115,95 @@ class TFGBuilder {
                 });
             }
         }
+
+        // Modified: to build and dump complete taint flow graph and taint flow paths
+        dumpCompleteTFGAndTaintFlowPath();
+
         node2TaintSet = null;
         return tfg;
+    }
+
+    /**
+     * Dumps the complete taint flow graph and taint flow path.
+     * It is an ad-hoc method for issue resolution demonstration.
+     */
+    private void dumpCompleteTFGAndTaintFlowPath() {
+        // build and dump taint flow graph
+        node2TaintSet = Maps.newMap();
+        TaintFlowGraph tfg = new TaintFlowGraph(
+                collectSourceNodes(), collectSinkNode());
+        Set<Node> visitedNodes = Sets.newSet();
+        Deque<Node> workList = new ArrayDeque<>(
+                tfg.getSourceNodes());
+        while (!workList.isEmpty()) {
+            Node node = workList.poll();
+            if (visitedNodes.add(node)) {
+                getOutEdges(node).forEach(edge -> {
+                    Node target = edge.target();
+                    if (true) { // modified from '!onlyApp || isApp(target)'
+                        tfg.addEdge(edge);
+                        if (!visitedNodes.contains(target)) {
+                            workList.add(target);
+                        }
+                    }
+                });
+            }
+        }
+        new TFGDumper().dump(tfg, new java.io.File(
+            pascal.taie.World.get().getOptions().getOutputDir(),
+                "complete-taint-flow-graph.dot"));
+
+        // build and dump taint flow path
+        pascal.taie.util.collection.MultiMap<SourcePoint, Node> sourcePoint2SourceNodes =
+                Maps.newMultiMap();
+        tfg.getSourceNode2SourcePoint().forEach((node, sourcePoint) -> {
+            sourcePoint2SourceNodes.put(sourcePoint, node);
+        });
+        pascal.taie.util.collection.MultiMap<SinkPoint, Node> sinkPoint2SinkNodes =
+                Maps.newMultiMap();
+        tfg.getSinkNode2SinkPoint().forEach((node, sinkPoint) -> {
+            sinkPoint2SinkNodes.put(sinkPoint, node);
+        });
+        var counter = new java.util.concurrent.atomic.AtomicInteger(1);
+        java.util.function.Function<Integer, String> withPrefixZero =
+                i -> String.format("%0" + String.valueOf(taintFlows.size()).length() + "d", i);
+        taintFlows.forEach(tf -> {
+            var path = new ArrayList<FlowEdge>();
+            Map<Node, FlowEdge> processor = Maps.newMap();
+            Set<Node> srcNodes = sourcePoint2SourceNodes.get(tf.sourcePoint());
+            Set<Node> sinkNodes = sinkPoint2SinkNodes.get(tf.sinkPoint());
+            java.util.Queue<Node> queue = new java.util.LinkedList<>(srcNodes);
+            while (!queue.isEmpty()) {
+                Node curr = queue.poll();
+                if (sinkNodes.contains(curr)) {
+                    while (!srcNodes.contains(curr)) {
+                        path.add(processor.get(curr));
+                        curr = processor.get(curr).source();
+                    }
+                    java.util.Collections.reverse(path);
+                    break;
+                }
+                for (FlowEdge edge : tfg.getOutEdgesOf(curr)) {
+                    Node next = edge.target();
+                    if (processor.containsKey(next)) {
+                        continue;
+                    }
+                    processor.put(next, edge);
+                    queue.add(next);
+                }
+            }
+            // dump the path
+            Map<Node, SourcePoint> node2SourcePoint = Maps.newMap();
+            srcNodes.forEach(node -> node2SourcePoint.put(node, tf.sourcePoint()));
+            Map<Node, SinkPoint> node2SinkPoint = Maps.newMap();
+            sinkNodes.forEach(node -> node2SinkPoint.put(node, tf.sinkPoint()));
+            TaintFlowGraph sp = new TaintFlowGraph(node2SourcePoint, node2SinkPoint);
+            path.forEach(sp::addEdge);
+            new TFGDumper().dump(sp, new java.io.File(
+                    pascal.taie.World.get().getOptions().getOutputDir(),
+                    "taint-flow-path-" + withPrefixZero.apply(counter.getAndIncrement()) + ".dot"));
+        });
+
     }
 
     private Map<Node, SourcePoint> collectSourceNodes() {
