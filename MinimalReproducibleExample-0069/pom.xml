@@ -6,7 +6,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <tai-e.version>0.5.1-SNAPSHOT</tai-e.version>
+        <tai-e.version>0.5.1</tai-e.version>
     </properties>
 
     <groupId>org.example</groupId>
@@ -22,23 +22,16 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.20.0</version>
+            <version>2.23.1</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>snapshots</id>
-            <name>Sonatype snapshot server</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>

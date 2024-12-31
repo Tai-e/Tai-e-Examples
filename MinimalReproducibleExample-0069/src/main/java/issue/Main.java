@@ -19,7 +19,7 @@ public class Main {
 //                      implicit-entries:true;
 //                      distinguish-string-constants:null;
 //                      reflection-inference:solar;
-//                      taint-config:MinimalReproducibleExample-0069/taint-config.yml;
+//                      taint-config:MinimalReproducibleExample-0069/configs/taint-config.yml;
 //                      """
 //        );
     }
