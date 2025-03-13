@@ -46,12 +46,12 @@ public class CustomEntryPointPlugin implements Plugin {
         JMethod declaredParam1 = clz.getDeclaredMethod("entryWithDeclaredParam1");
         assert declaredParam1 != null;
         solver.addEntryPoint(new EntryPoint(
-                declaredParam1, new DeclaredParamProvider(declaredParam1, heapModel, 1)));
+                declaredParam1, new DeclaredParamProvider(declaredParam1, heapModel, 0)));
 
         JMethod declaredParam2 = clz.getDeclaredMethod("entryWithDeclaredParam2");
         assert declaredParam2 != null;
         solver.addEntryPoint(new EntryPoint(
-                declaredParam2, new DeclaredParamProvider(declaredParam2, heapModel, 2)));
+                declaredParam2, new DeclaredParamProvider(declaredParam2, heapModel, 1)));
 
         JMethod specifiedParam = clz.getDeclaredMethod("entryWithSpecifiedParam");
         assert specifiedParam != null;
