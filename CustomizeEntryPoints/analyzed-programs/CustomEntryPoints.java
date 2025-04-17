@@ -15,7 +15,7 @@ public class CustomEntryPoints {
     // static entrypoint with declared parameters
     public static void entryWithDeclaredParam2(Param2 p2) {
         String s1 = p2.getS1(); // Param2.getS1 is reachable
-        Param1 p1 = p2.getP1(); // p1 is not null if k >= 0
+        Param1 p1 = p2.getP1(); // p1 is not null if k >= 1
         String s2 = p1.getS2(); // Param1.getS2 is reachable if k >= 1
     }
 
